@@ -1,0 +1,1 @@
+The file api.mustache is modified to pass the ServletContext to a service implementation.

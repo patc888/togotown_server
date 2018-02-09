@@ -1,0 +1,147 @@
+swagger: '2.0'
+info:
+  version: "v1"
+  title: TogoTown API
+
+host: localhost:8080
+basePath: /togotown/v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+securityDefinitions:
+  application:
+    type: oauth2
+    # This should be updated to the Token URL of your OAuth provider.
+    tokenUrl: http://example.com/oauth/token
+    flow: application
+    scopes:
+      player: Used by players.
+      gamer: Used by translators and game developers.
+      admin: Used by administrators.
+
+security:
+  - application:
+    - player
+
+paths:
+  /stats:
+    get:
+      summary: Returns general information about the game.
+      description: Returns general information about the game.
+      operationId: getStats
+      responses:
+        200:
+          description: The returned stats.
+          schema:
+            properties:
+              userCount:
+                type: integer
+                description: Number of users in the game.
+                required: true
+              clueCount:
+                type: integer
+                description: Number of clues in the game.
+                required: true
+              matcheCount:
+                type: integer
+                description: Current number of matches completed or in progress.
+                required: true
+        default:
+          description: An error.
+          schema:
+            $ref: '#/definitions/Error'
+
+  /clues:
+    get:
+      summary: Returns a list of clue information
+      description: Returns a list of clue information
+      operationId: getClues
+      parameters:
+        - name: sceneId
+          in: query
+          description: If specified, the returned clues are filtered by the specified sceneId.
+          type: integer
+          required: false
+      responses:
+        200:
+          description: A list of clues
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Clue"
+        default:
+          description: An error.
+          schema:
+            $ref: '#/definitions/Error'
+
+    post:
+      summary: Adds a new clue
+      operationId: createClue
+      parameters:
+        - in: body
+          name: body
+          description: The clue information that needs to be added
+          required: true
+          schema:
+            $ref: '#/definitions/Clue'
+      responses:
+        201:
+          description: Null response
+        default:
+          description: An error.
+          schema:
+            $ref: '#/definitions/Error'
+
+  /clues/{clueId}:
+    get:
+      summary: Returns the specified clue information
+      operationId: getClue
+      parameters:
+        - name: clueId
+          in: path
+          description: If specified, the returned clues are filtered by the specified sceneId.
+          type: integer
+      responses:
+        200:
+          description: A list of clues
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Clue"
+        default:
+          description: An error.
+          schema:
+            $ref: '#/definitions/Error'
+  /ping:
+    get:
+      summary: Server heartbeat operation
+      description: This operation shows how to override the global security defined above, as we want to open it up for all users.
+      # No security check is needed for this endpoint
+      security: [ ]
+      responses:
+        200:
+          description: OK
+
+definitions:
+  Clue:
+    type: object
+    properties:
+      id:
+        type: integer
+        required: true
+      title:
+        type: string
+        required: true
+  Error:
+    properties:
+      code:
+        type: integer
+        required: true
+      message:
+        type: string
+        required: true
+
