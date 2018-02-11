@@ -34,6 +34,10 @@
             <param-name>StatsApi.implementation</param-name>
             <param-value>com.togotown.containers.jaxrs.StatsApiServiceImpl</param-value>
         </init-param>
+        <init-param>
+            <param-name>togotown.resourceBasename</param-name>
+            <param-value>conf/togotown_dev</param-value>
+        </init-param>
 
         <load-on-startup>1</load-on-startup>
     </servlet>

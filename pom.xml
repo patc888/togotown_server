@@ -87,27 +87,93 @@
                 </executions>
             </plugin>
             <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>build-helper-maven-plugin</artifactId>
-              <version>1.9.1</version>
-              <executions>
-                <execution>
-                  <id>add-source</id>
-                  <phase>generate-sources</phase>
-                  <goals>
-                    <goal>add-source</goal>
-                  </goals>
-                  <configuration>
-                    <sources>
-                      <source>target/generated-sources/swagger/src</source>
-                    </sources>
-                  </configuration>
-                </execution>
-              </executions>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/swagger/src</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- invoke code generation with "mvn jooq-codegen:generate" -->
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>3.10.4</version>
+                <configuration>
+                    <jdbc>
+                        <driver>com.mysql.jdbc.Driver</driver>
+                        <url>${jdbc.url}</url>
+                        <user>${jdbc.user}</user>
+                        <password>${jdbc.password}</password>
+                    </jdbc>
+                    <generator>
+                        <database>
+                            <name>org.jooq.util.mysql.MySQLDatabase</name>
+                            <includes>.*</includes>
+                            <excludes></excludes>
+                            <schemata>
+                                <schema>
+                                    <inputSchema>dev_tt</inputSchema>
+                                </schema>
+                                <schema>
+                                    <inputSchema>dev_tt_drupal</inputSchema>
+                                </schema>
+                            </schemata>
+                        </database>
+                        <target>
+                            <packageName>org.jooq</packageName>
+                            <directory>src/main/java/generated_sources</directory>
+                        </target>
+                        <generate>
+                            <daos>true</daos>
+                        </generate>
+                    </generator>
+                </configuration>
+                <dependencies>
+                    <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.45</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.45</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jooq/jooq -->
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.10.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>3.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>3.8.3</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.typesafe/config -->
         <dependency>
             <groupId>com.typesafe</groupId>
@@ -208,6 +274,12 @@
             <version>${jackson-jaxrs-version}</version>
             <scope>compile</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.7.6</version>
+        </dependency>
 
 
         <!-- Bean Validation API support -->
@@ -240,6 +312,9 @@
         <servlet-api-version>2.5</servlet-api-version>
         <cxf-version>3.2.1</cxf-version>
         <jackson-jaxrs-version>2.8.9</jackson-jaxrs-version>
+        <jdbc.url>jdbc:mysql://localhost:3306/dev_tt?useSSL=false</jdbc.url>
+        <jdbc.user>togotown</jdbc.user>
+        <jdbc.password>password</jdbc.password>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>

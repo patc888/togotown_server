@@ -1,6 +1,7 @@
 package com.togotown.containers.jaxrs;
 
 import com.togotown.Clue;
+import com.togotown.TogoTown;
 import swagger.jaxrs.ApiResponseMessage;
 import swagger.jaxrs.CluesApiService;
 import swagger.jaxrs.NotFoundException;
@@ -13,17 +14,14 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-02-08T13:37:07.945-08:00")
 public class CluesApiServiceImpl extends CluesApiService {
-    @Context
-    ServletContext context;
+    private TogoTown togotown;
 
-    @Inject
-    ServletContext context2;
-
-    public CluesApiServiceImpl(ServletConfig servletConfig) {
-        System.out.println(servletConfig);
+    public CluesApiServiceImpl(ServletConfig servletConfig) throws Exception {
+        togotown = TogoTownService.get(servletConfig, servletConfig.getInitParameter("togotown.resourceBasename"));
     }
 
     @Override
@@ -38,6 +36,7 @@ public class CluesApiServiceImpl extends CluesApiService {
     }
     @Override
     public Response getClues( Integer sceneId, SecurityContext securityContext) throws NotFoundException {
+        List<Clue> clues = togotown.getClues();
         // do some magic!
         return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic")).build();
     }
