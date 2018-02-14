@@ -16,11 +16,11 @@ public class TogoTown {
     }
 
     public Clue getClue(int clueId) {
-        return new Clue();
+        return storage.getClue(clueId);
     }
 
-    public List<Clue> getClues() {
-        return storage.getClues(0);
+    public List<Clue> getClues(int sceneId) {
+        return storage.getClues(sceneId);
     }
 
     public void addClue(Clue clue) {

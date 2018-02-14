@@ -65,7 +65,7 @@ paths:
           in: query
           description: If specified, the returned clues are filtered by the specified sceneId.
           type: integer
-          required: false
+          required: true
       responses:
         200:
           description: A list of clues
@@ -133,9 +133,27 @@ definitions:
       id:
         type: integer
         required: true
-      title:
+      sceneId:
+        type: integer
+        required: true
+      langId:
+        type: integer
+        required: true
+      phraseId:
+        type: integer
+        required: true
+      parentId:
+        type: integer
+        required: false
+      spotIds:
+        type: string
+        required: false
+      active:
         type: string
         required: true
+      reviewed:
+        type: string
+        required: false
   Error:
     properties:
       code:

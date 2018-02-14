@@ -5,26 +5,23 @@ import com.togotown.TogoTownException;
 import com.typesafe.config.Config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-
-import org.jooq.dev_tt.tables.daos.ClueDao;
-import org.jooq.*;
+import org.apache.cxf.jaxrs.ext.Nullable;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultConfiguration;
 
-import static org.jooq.dev_tt.Tables.CLUE;
-import static org.jooq.SQLDialect.MYSQL;
-
-import java.io.IOException;
+import javax.validation.constraints.NotNull;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.jooq.dev_tt.Tables.CLUE;
 
 public class StorageImpl implements Storage {
 
     private HikariDataSource dataSource;
 
-    public StorageImpl(Config conf) {
+    public StorageImpl(@NotNull Config conf) {
         HikariConfig hikariConf = new HikariConfig();
         hikariConf.setPoolName(conf.getString("connection_pools.poolName"));
         hikariConf.setMaximumPoolSize(conf.getInt("connection_pools.maximumPoolSize"));
@@ -40,18 +37,24 @@ public class StorageImpl implements Storage {
     }
 
     @Override
+    @NotNull
     public List<Clue> getClues(int sceneId) {
         try (Connection conn = dataSource.getConnection()) {
             DSLContext db = DSL.using(conn, SQLDialect.MYSQL);
-            List<Clue> clues = db.select().from(CLUE).where(CLUE.SCENE_ID.eq(sceneId)).fetchInto(Clue.class);
-            return clues;
+            return db.select().from(CLUE).where(CLUE.SCENE_ID.eq(sceneId)).fetch().into(Clue.class);
         } catch (SQLException e) {
             throw TogoTownException.unavailable(e);
         }
     }
 
     @Override
+    @Nullable
     public Clue getClue(int clueId) {
-        return null;
+        try (Connection conn = dataSource.getConnection()) {
+            DSLContext db = DSL.using(conn, SQLDialect.MYSQL);
+            return db.select().from(CLUE).where(CLUE.ID.eq(clueId)).fetchAny().into(Clue.class);
+        } catch (SQLException e) {
+            throw TogoTownException.unavailable(e);
+        }
     }
 }

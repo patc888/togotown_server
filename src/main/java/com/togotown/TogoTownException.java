@@ -26,4 +26,8 @@ public class TogoTownException extends RuntimeException {
     public static TogoTownException unavailable(Throwable e) {
         return new TogoTownException(Code.UNAVAILABLE, e);
     }
+
+    public static TogoTownException badInput(String message) {
+        return new TogoTownException(Code.BAD_INPUT, message);
+    }
 }
