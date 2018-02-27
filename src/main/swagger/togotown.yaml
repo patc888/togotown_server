@@ -154,6 +154,72 @@ definitions:
       reviewed:
         type: string
         required: false
+  Scene:
+    type: object
+    properties:
+      id:
+        type: integer
+        required: true
+      townId:
+        type: integer
+        required: true
+      phraseId:
+        type: integer
+        required: true
+      desc:
+        type: string
+        required: true
+      filename:
+        type: string
+        required: false
+      nextSceneId:
+        type: integer
+        required: false
+      active:
+        type: string
+        required: true
+      reviewed:
+        type: string
+        required: false
+  Phrase:
+    type: object
+    properties:
+      id:
+        type: integer
+        required: true
+      enId:
+        type: integer
+        required: true
+      langId:
+        type: integer
+        required: true
+      display:
+        type: string
+        required: true
+      pronounce:
+        type: string
+        required: false
+      tokenCount:
+        type: integer
+        required: false
+      tokenIds:
+        type: string
+        required: false
+      subIds:
+        type: string
+        required: false
+      audio:
+        type: string
+        required: false
+      audioId:
+        type: string
+        required: false
+      active:
+        type: string
+        required: true
+      reviewed:
+        type: string
+        required: false
   Error:
     properties:
       code:

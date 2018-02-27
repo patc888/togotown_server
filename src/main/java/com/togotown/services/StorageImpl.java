@@ -57,4 +57,9 @@ public class StorageImpl implements Storage {
             throw TogoTownException.unavailable(e);
         }
     }
+
+    @Override
+    public void close() {
+        dataSource.close();
+    }
 }

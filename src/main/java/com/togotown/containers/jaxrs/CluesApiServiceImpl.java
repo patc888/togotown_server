@@ -25,7 +25,7 @@ public class CluesApiServiceImpl extends CluesApiService {
     private TogoTown togotown;
 
     public CluesApiServiceImpl(ServletConfig servletConfig) throws Exception {
-        togotown = TogoTownService.get(servletConfig, servletConfig.getInitParameter("togotown.resourceBasename"));
+        togotown = TogoTownService.get(servletConfig, null);
     }
 
     @Override

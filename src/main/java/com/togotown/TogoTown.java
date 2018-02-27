@@ -26,4 +26,8 @@ public class TogoTown {
     public void addClue(Clue clue) {
 
     }
+
+    public void close() {
+        storage.close();
+    }
 }

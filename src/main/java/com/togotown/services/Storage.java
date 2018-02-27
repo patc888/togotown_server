@@ -7,4 +7,5 @@ import java.util.List;
 public interface Storage {
     List<Clue> getClues(int sceneId);
     Clue getClue(int clueId);
+    void close();
 }

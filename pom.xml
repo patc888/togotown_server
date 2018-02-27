@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>togotown</groupId>
     <artifactId>togotown-server</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>togotown-server</name>
-    <version>1.0.0</version>
+    <version>1.0</version>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -149,6 +149,28 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.3.7</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <contextDirectory>src/main/resources/docker</contextDirectory>
+                    <repository>patc888/togotown</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.war</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -280,15 +302,19 @@
             <artifactId>HikariCP</artifactId>
             <version>2.7.6</version>
         </dependency>
-
-
         <!-- Bean Validation API support -->
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>1.1.0.Final</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.testng/testng -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.14.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -299,6 +325,13 @@
             </snapshots>
         </repository>
     </repositories>
+    <distributionManagement>
+        <repository>
+            <id>dockerhub</id>
+            <name>Docker Hub</name>
+            <url>https://registry.hub.docker.com</url>
+        </repository>
+    </distributionManagement>
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
